@@ -10,6 +10,8 @@
         android:id="@+id/edit_text_word_detail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:drawableStart="@drawable/ic_action_name"
+        android:drawablePadding="8dp"
         android:hint="Word" />
 
     <EditText
@@ -17,6 +19,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/edit_text_word_detail"
+        android:drawableStart="@drawable/ic_meaning1"
+        android:drawablePadding="8dp"
         android:ems="10"
         android:gravity="start|top"
         android:hint="Meaning"

@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:drawableStart="@drawable/ic_action_name"
         android:drawablePadding="8dp"
-        android:hint="Word" />
+        android:hint="کلمه" />
 
     <EditText
         android:id="@+id/edit_text_meaning"
@@ -23,7 +23,7 @@
         android:drawablePadding="8dp"
         android:ems="10"
         android:gravity="start|top"
-        android:hint="Meaning"
+        android:hint="معنی"
         android:inputType="textMultiLine" />
 
 

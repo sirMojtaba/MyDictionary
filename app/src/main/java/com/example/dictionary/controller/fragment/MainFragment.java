@@ -10,6 +10,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -51,6 +54,7 @@ public class MainFragment extends Fragment {
                 .allowMainThreadQueries()
                 .build();
         mWordList = db.appDao().getWordList();
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -117,5 +121,20 @@ public class MainFragment extends Fragment {
     private void showSubtitle() {
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.getSupportActionBar().setSubtitle(numberOfWords());
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.app_bar_search:
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
