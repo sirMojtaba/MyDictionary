@@ -3,6 +3,7 @@ package com.example.dictionary.controller.fragment;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -59,10 +60,17 @@ public class MainFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         findViews(view);
         initRecyclerView();
-
+        updateUi();
         setClickListeners();
+        showSubtitle();
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateUi();
     }
 
     private void findViews(View view) {
@@ -85,5 +93,29 @@ public class MainFragment extends Fragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mWordRecyclerViewAdapter = new WordRecyclerViewAdapter(mWordList, getActivity());
         mRecyclerView.setAdapter(mWordRecyclerViewAdapter);
+    }
+
+    public void updateUi() {
+        if (mWordRecyclerViewAdapter == null) {
+            mWordRecyclerViewAdapter = new WordRecyclerViewAdapter(mWordList, getActivity());
+            mRecyclerView.setAdapter(mWordRecyclerViewAdapter);
+        } else {
+            mWordRecyclerViewAdapter.setWordList(mWordList);
+            mWordRecyclerViewAdapter.notifyDataSetChanged();
+        }
+    }
+
+    public String numberOfWords() {
+        String text = null;
+        if (mWordList.size() == 1)
+            text = "1 word";
+        else if (mWordList.size() > 1)
+            text = mWordList.size() + " words";
+        return text;
+    }
+
+    private void showSubtitle() {
+        AppCompatActivity activity = (AppCompatActivity) getActivity();
+        activity.getSupportActionBar().setSubtitle(numberOfWords());
     }
 }

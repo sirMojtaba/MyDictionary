@@ -3,13 +3,15 @@
     android:id="@+id/layout_row"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="16dp">
+    android:padding="8dp">
 
     <TextView
         android:id="@+id/text_view_word"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:text="TextView"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp" />
 
     <TextView
         android:id="@+id/text_view_meaning"
@@ -17,5 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/text_view_word"
         android:layout_marginTop="8dp"
-        android:text="TextView" />
+        android:text="TextView"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp" />
 </RelativeLayout>

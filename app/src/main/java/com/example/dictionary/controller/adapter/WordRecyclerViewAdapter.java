@@ -24,6 +24,10 @@ public class WordRecyclerViewAdapter extends RecyclerView.Adapter<WordRecyclerVi
     private List<Word> mWordList;
     private Activity mActivity;
 
+    public void setWordList(List<Word> wordList) {
+        mWordList = wordList;
+    }
+
     public WordRecyclerViewAdapter(List<Word> wordList, Activity activity) {
         mWordList = wordList;
         mActivity = activity;
@@ -40,6 +44,9 @@ public class WordRecyclerViewAdapter extends RecyclerView.Adapter<WordRecyclerVi
     public void onBindViewHolder(@NonNull WordViewHolder holder, int position) {
         Word word = mWordList.get(position);
         holder.bindWord(word);
+
+        if (position % 2 != 0)
+            holder.mLayoutRow.setBackgroundResource(R.drawable.row_background);
     }
 
     @Override
@@ -63,7 +70,7 @@ public class WordRecyclerViewAdapter extends RecyclerView.Adapter<WordRecyclerVi
                 @Override
                 public void onClick(View view) {
                     WordDetailDialogFragment wordDetailDialogFragment = WordDetailDialogFragment.newInstance(mWordList.get(getAdapterPosition()));
-                    wordDetailDialogFragment.show(((AppCompatActivity)mActivity).getSupportFragmentManager(), TAG_WORD_DETAIL);
+                    wordDetailDialogFragment.show(((AppCompatActivity) mActivity).getSupportFragmentManager(), TAG_WORD_DETAIL);
                 }
             });
         }
@@ -71,7 +78,6 @@ public class WordRecyclerViewAdapter extends RecyclerView.Adapter<WordRecyclerVi
         public void bindWord(Word word) {
             mTextViewPhrase.setText(word.getPhrase());
             mTextViewMeaning.setText(word.getMeaning());
-
         }
     }
 }
