@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.dictionary.R;
+import com.example.dictionary.controller.adapter.WordRecyclerViewAdapter;
+import com.example.dictionary.database.AppDatabase;
 import com.example.dictionary.model.Word;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -22,9 +25,10 @@ import java.util.List;
 
 public class MainFragment extends Fragment {
 
+    public static final String TAG_NEW_WORD_DIALOG = "new_word_dialog";
     private RecyclerView mRecyclerView;
     private WordRecyclerViewAdapter mWordRecyclerViewAdapter;
-    private List<Word> mWordList = new ArrayList<>();
+    private List<Word> mWordList;
     private FloatingActionButton mFloatingActionButton;
 
 
@@ -42,7 +46,10 @@ public class MainFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        AppDatabase db = Room.databaseBuilder(getActivity(), AppDatabase.class, "dictionary_database")
+                .allowMainThreadQueries()
+                .build();
+        mWordList = db.appDao().getWordList();
     }
 
     @Override
@@ -55,7 +62,6 @@ public class MainFragment extends Fragment {
 
         setClickListeners();
 
-        mWordList.add(new Word("car", "ماشین"));
         return view;
     }
 
@@ -68,6 +74,8 @@ public class MainFragment extends Fragment {
         mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                NewWordDialogFragment newWordDialogFragment = NewWordDialogFragment.newInstance();
+                newWordDialogFragment.show(getFragmentManager(), TAG_NEW_WORD_DIALOG);
 
             }
         });
@@ -77,52 +85,5 @@ public class MainFragment extends Fragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mWordRecyclerViewAdapter = new WordRecyclerViewAdapter(mWordList);
         mRecyclerView.setAdapter(mWordRecyclerViewAdapter);
-    }
-
-
-
-
-    public class WordRecyclerViewAdapter extends RecyclerView.Adapter<WordRecyclerViewAdapter.WordViewHolder> {
-
-        private List<Word> mWordList;
-
-        public WordRecyclerViewAdapter(List<Word> wordList) {
-            mWordList = wordList;
-        }
-
-        @NonNull
-        @Override
-        public WordViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_row, parent, false);
-            return new WordViewHolder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull WordViewHolder holder, int position) {
-            Word word = mWordList.get(position);
-            holder.bindWord(word);
-        }
-
-        @Override
-        public int getItemCount() {
-            return mWordList.size();
-        }
-
-        public class WordViewHolder extends RecyclerView.ViewHolder {
-
-            private TextView mTextViewPhrase;
-            private TextView mTextViewMeaning;
-
-            public WordViewHolder(@NonNull View itemView) {
-                super(itemView);
-                mTextViewPhrase = itemView.findViewById(R.id.text_view_word);
-                mTextViewMeaning = itemView.findViewById(R.id.text_view_meaning);
-            }
-            public void bindWord(Word word){
-                mTextViewPhrase.setText(word.getPhrase());
-                mTextViewMeaning.setText(word.getMeaning());
-
-            }
-        }
     }
 }
