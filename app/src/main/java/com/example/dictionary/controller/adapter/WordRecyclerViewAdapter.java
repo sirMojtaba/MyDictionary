@@ -3,6 +3,7 @@ package com.example.dictionary.controller.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -43,11 +44,20 @@ public class WordRecyclerViewAdapter extends RecyclerView.Adapter<WordRecyclerVi
 
         private TextView mTextViewPhrase;
         private TextView mTextViewMeaning;
+        private RelativeLayout mLayoutRow;
 
         public WordViewHolder(@NonNull View itemView) {
             super(itemView);
             mTextViewPhrase = itemView.findViewById(R.id.text_view_word);
             mTextViewMeaning = itemView.findViewById(R.id.text_view_meaning);
+            mLayoutRow = itemView.findViewById(R.id.layout_row);
+
+            mLayoutRow.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                }
+            });
         }
 
         public void bindWord(Word word) {

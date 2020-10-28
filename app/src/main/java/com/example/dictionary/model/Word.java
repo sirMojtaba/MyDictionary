@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey;
 public class Word {
     private String mPhrase;
     private String mMeaning;
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     private int mId;
 
     public String getPhrase() {

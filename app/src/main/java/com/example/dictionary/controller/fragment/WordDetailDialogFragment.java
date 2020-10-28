@@ -2,7 +2,6 @@ package com.example.dictionary.controller.fragment;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
@@ -21,13 +20,12 @@ import com.example.dictionary.R;
 import com.example.dictionary.database.AppDatabase;
 import com.example.dictionary.model.Word;
 
-
-public class NewWordDialogFragment extends DialogFragment {
+public class WordDetailDialogFragment extends DialogFragment {
     private EditText mEditTextWord;
     private EditText mEditTextMeaning;
     private AppDatabase mAppDatabase;
 
-    public NewWordDialogFragment() {
+    public WordDetailDialogFragment() {
         // Required empty public constructor
     }
 
@@ -47,7 +45,7 @@ public class NewWordDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
 
-        View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_new_word_dialog, null);
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_word_detail_dialog, null);
         mAppDatabase = Room.databaseBuilder(view.getContext(), AppDatabase.class, "dictionary_database")
                 .allowMainThreadQueries()
                 .build();
@@ -58,17 +56,17 @@ public class NewWordDialogFragment extends DialogFragment {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 Word word = new Word(mEditTextWord.getText().toString(), mEditTextMeaning.getText().toString());
-                mAppDatabase.appDao().insertWord(word);
+                mAppDatabase.appDao().updateWord(word);
             }
         })
-                .setTitle("New word")
+                .setTitle("Word Details")
                 .setView(view);
         AlertDialog dialog = builder.create();
         return dialog;
     }
 
     private void findViews(View view) {
-        mEditTextWord = view.findViewById(R.id.edit_text_word);
-        mEditTextMeaning = view.findViewById(R.id.edit_text_meaning);
+        mEditTextWord = view.findViewById(R.id.edit_text_word_detail);
+        mEditTextMeaning = view.findViewById(R.id.edit_text_meaning_detail);
     }
 }
