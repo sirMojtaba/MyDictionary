@@ -1,5 +1,7 @@
 package com.example.dictionary.controller.adapter;
 
+import android.app.Activity;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,19 +9,24 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.dictionary.R;
+import com.example.dictionary.controller.fragment.WordDetailDialogFragment;
 import com.example.dictionary.model.Word;
 
 import java.util.List;
 
 public class WordRecyclerViewAdapter extends RecyclerView.Adapter<WordRecyclerViewAdapter.WordViewHolder> {
 
+    public static final String TAG_WORD_DETAIL = "word_detail";
     private List<Word> mWordList;
+    private Activity mActivity;
 
-    public WordRecyclerViewAdapter(List<Word> wordList) {
+    public WordRecyclerViewAdapter(List<Word> wordList, Activity activity) {
         mWordList = wordList;
+        mActivity = activity;
     }
 
     @NonNull
@@ -55,7 +62,8 @@ public class WordRecyclerViewAdapter extends RecyclerView.Adapter<WordRecyclerVi
             mLayoutRow.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
+                    WordDetailDialogFragment wordDetailDialogFragment = WordDetailDialogFragment.newInstance(mWordList.get(getAdapterPosition()));
+                    wordDetailDialogFragment.show(((AppCompatActivity)mActivity).getSupportFragmentManager(), TAG_WORD_DETAIL);
                 }
             });
         }

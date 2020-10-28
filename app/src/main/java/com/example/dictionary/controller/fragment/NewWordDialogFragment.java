@@ -62,7 +62,9 @@ public class NewWordDialogFragment extends DialogFragment {
             }
         })
                 .setTitle("New word")
+                .setNegativeButton(android.R.string.cancel, null)
                 .setView(view);
+
         AlertDialog dialog = builder.create();
         return dialog;
     }

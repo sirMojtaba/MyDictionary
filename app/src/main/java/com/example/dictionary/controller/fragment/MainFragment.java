@@ -83,7 +83,7 @@ public class MainFragment extends Fragment {
 
     private void initRecyclerView() {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mWordRecyclerViewAdapter = new WordRecyclerViewAdapter(mWordList);
+        mWordRecyclerViewAdapter = new WordRecyclerViewAdapter(mWordList, getActivity());
         mRecyclerView.setAdapter(mWordRecyclerViewAdapter);
     }
 }

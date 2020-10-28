@@ -3,8 +3,10 @@ package com.example.dictionary.model;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.io.Serializable;
+
 @Entity(tableName = "word")
-public class Word {
+public class Word implements Serializable {
     private String mPhrase;
     private String mMeaning;
     @PrimaryKey(autoGenerate = true)
