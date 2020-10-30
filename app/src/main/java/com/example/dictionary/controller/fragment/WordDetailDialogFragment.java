@@ -2,20 +2,18 @@ package com.example.dictionary.controller.fragment;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
 import androidx.room.Room;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.EditText;
 
 import com.example.dictionary.R;
 import com.example.dictionary.database.AppDatabase;
@@ -27,6 +25,7 @@ public class WordDetailDialogFragment extends DialogFragment {
     private EditText mEditTextMeaning;
     private AppDatabase mAppDatabase;
     private Word mWord;
+    private Callbacks mCallbacks;
 
     public WordDetailDialogFragment() {
         // Required empty public constructor
@@ -69,6 +68,10 @@ public class WordDetailDialogFragment extends DialogFragment {
                         mWord.setPhrase(mEditTextWord.getText().toString());
                         mWord.setMeaning(mEditTextMeaning.getText().toString());
                         mAppDatabase.appDao().updateWord(mWord);
+//                        Fragment fragment = getParentFragment();
+//                        Intent intent = new Intent();
+//                        fragment.onActivityResult(WordRecyclerViewAdapter.REQUEST_CODE_WORD_DETAIL, Activity.RESULT_OK, intent);
+                        mCallbacks.onWordClicked();
                     }
                 })
 
@@ -76,6 +79,7 @@ public class WordDetailDialogFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         mAppDatabase.appDao().deleteWord(mWord);
+                        mCallbacks.onWordClicked();
                     }
                 })
 
@@ -110,5 +114,16 @@ public class WordDetailDialogFragment extends DialogFragment {
     private String shareText() {
         String text = "Word: " + mWord.getPhrase() + "\n" + "Meaning: " + mWord.getMeaning();
         return text;
+    }
+
+    public interface Callbacks {
+        void onWordClicked();
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context instanceof Callbacks)
+            mCallbacks = (Callbacks) context;
     }
 }

@@ -1,7 +1,7 @@
 package com.example.dictionary.controller.adapter;
 
 import android.app.Activity;
-import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +21,7 @@ import java.util.List;
 public class WordRecyclerViewAdapter extends RecyclerView.Adapter<WordRecyclerViewAdapter.WordViewHolder> {
 
     public static final String TAG_WORD_DETAIL = "word_detail";
+    public static final int REQUEST_CODE_WORD_DETAIL = 0;
     private List<Word> mWordList;
     private Activity mActivity;
 
@@ -47,6 +48,9 @@ public class WordRecyclerViewAdapter extends RecyclerView.Adapter<WordRecyclerVi
 
         if (position % 2 != 0)
             holder.mLayoutRow.setBackgroundResource(R.drawable.row_background);
+        else{
+            holder.mLayoutRow.setBackgroundColor(Color.parseColor("#00FFFFFF"));
+        }
     }
 
     @Override

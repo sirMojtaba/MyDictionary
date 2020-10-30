@@ -8,8 +8,9 @@ import android.os.Bundle;
 
 import com.example.dictionary.controller.fragment.MainFragment;
 import com.example.dictionary.R;
+import com.example.dictionary.controller.fragment.WordDetailDialogFragment;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements WordDetailDialogFragment.Callbacks {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +23,14 @@ public class MainActivity extends AppCompatActivity {
             fragmentManager.beginTransaction()
                     .add(R.id.fragment_container, MainFragment.newInstance())
                     .commit();
+        }
+    }
+
+    @Override
+    public void onWordClicked() {
+        for (int i = 0; i <getSupportFragmentManager().getFragments().size() ; i++) {
+            if (getSupportFragmentManager().getFragments().get(i) instanceof MainFragment)
+                ((MainFragment) getSupportFragmentManager().getFragments().get(i)).updateUi();
         }
     }
 }

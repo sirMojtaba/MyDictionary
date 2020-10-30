@@ -1,14 +1,18 @@
 package com.example.dictionary.controller.fragment;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,10 +34,12 @@ import java.util.List;
 public class MainFragment extends Fragment {
 
     public static final String TAG_NEW_WORD_DIALOG = "new_word_dialog";
+    public static final int REQUEST_CODE_MAIN_FRAGMENT = 0;
     private RecyclerView mRecyclerView;
     private WordRecyclerViewAdapter mWordRecyclerViewAdapter;
     private List<Word> mWordList;
     private FloatingActionButton mFloatingActionButton;
+    private AppDatabase mAppDatabase;
 
 
     public MainFragment() {
@@ -50,11 +56,13 @@ public class MainFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        AppDatabase db = Room.databaseBuilder(getActivity(), AppDatabase.class, "dictionary_database")
+        mAppDatabase = Room.databaseBuilder(getActivity(), AppDatabase.class, "dictionary_database")
                 .allowMainThreadQueries()
                 .build();
-        mWordList = db.appDao().getWordList();
+        mWordList = mAppDatabase.appDao().getWordList();
+
         setHasOptionsMenu(true);
+        Log.d("tag", "onCreate");
     }
 
     @Override
@@ -64,17 +72,16 @@ public class MainFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         findViews(view);
         initRecyclerView();
-        updateUi();
         setClickListeners();
         showSubtitle();
-
+        Log.d("tag", "onCreateView");
         return view;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        updateUi();
+        Log.d("tag", "onResume");
     }
 
     private void findViews(View view) {
@@ -87,6 +94,7 @@ public class MainFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 NewWordDialogFragment newWordDialogFragment = NewWordDialogFragment.newInstance();
+                newWordDialogFragment.setTargetFragment(MainFragment.this, REQUEST_CODE_MAIN_FRAGMENT);
                 newWordDialogFragment.show(getFragmentManager(), TAG_NEW_WORD_DIALOG);
 
             }
@@ -101,20 +109,21 @@ public class MainFragment extends Fragment {
 
     public void updateUi() {
         if (mWordRecyclerViewAdapter == null) {
-            mWordRecyclerViewAdapter = new WordRecyclerViewAdapter(mWordList, getActivity());
+            mWordRecyclerViewAdapter = new WordRecyclerViewAdapter(mAppDatabase.appDao().getWordList(), getActivity());
             mRecyclerView.setAdapter(mWordRecyclerViewAdapter);
         } else {
-            mWordRecyclerViewAdapter.setWordList(mWordList);
+            mWordRecyclerViewAdapter.setWordList(mAppDatabase.appDao().getWordList());
             mWordRecyclerViewAdapter.notifyDataSetChanged();
         }
+        showSubtitle();
     }
 
     public String numberOfWords() {
         String text = null;
-        if (mWordList.size() == 1)
+        if (mAppDatabase.appDao().getWordList().size() == 1)
             text = "1 word";
-        else if (mWordList.size() > 1)
-            text = mWordList.size() + " words";
+        else if (mAppDatabase.appDao().getWordList().size() > 1)
+            text = mAppDatabase.appDao().getWordList().size() + " words";
         return text;
     }
 
@@ -137,4 +146,20 @@ public class MainFragment extends Fragment {
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (resultCode != Activity.RESULT_OK || data == null)
+            return;
+        if (requestCode == REQUEST_CODE_MAIN_FRAGMENT) {
+            updateUi();
+            return;
+        }
+
+        if (requestCode == WordRecyclerViewAdapter.REQUEST_CODE_WORD_DETAIL) {
+            updateUi();
+            return;
+        }
+    }
+
 }
