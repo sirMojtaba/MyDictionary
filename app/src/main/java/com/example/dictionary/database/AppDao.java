@@ -15,6 +15,9 @@ public interface AppDao {
     @Query("select * from word")
     List<Word> getWordList();
 
+    @Query("SELECT * FROM word WHERE word LIKE :search " + "OR meaning LIKE :search")
+    List<Word> findWord(String search);
+
     @Insert
     void insertWord(Word word);
 

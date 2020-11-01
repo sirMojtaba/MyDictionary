@@ -65,7 +65,7 @@ public class WordDetailDialogFragment extends DialogFragment {
                 .setPositiveButton("save", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        mWord.setPhrase(mEditTextWord.getText().toString());
+                        mWord.setWord(mEditTextWord.getText().toString());
                         mWord.setMeaning(mEditTextMeaning.getText().toString());
                         mAppDatabase.appDao().updateWord(mWord);
 //                        Fragment fragment = getParentFragment();
@@ -102,7 +102,7 @@ public class WordDetailDialogFragment extends DialogFragment {
     }
 
     private void initView() {
-        mEditTextWord.setText(mWord.getPhrase());
+        mEditTextWord.setText(mWord.getWord());
         mEditTextMeaning.setText(mWord.getMeaning());
     }
 
@@ -112,7 +112,7 @@ public class WordDetailDialogFragment extends DialogFragment {
     }
 
     private String shareText() {
-        String text = "Word: " + mWord.getPhrase() + "\n" + "Meaning: " + mWord.getMeaning();
+        String text = "Word: " + mWord.getWord() + "\n" + "Meaning: " + mWord.getMeaning();
         return text;
     }
 

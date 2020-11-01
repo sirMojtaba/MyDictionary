@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,7 +20,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.example.dictionary.R;
 import com.example.dictionary.controller.adapter.WordRecyclerViewAdapter;
@@ -27,7 +27,6 @@ import com.example.dictionary.database.AppDatabase;
 import com.example.dictionary.model.Word;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -60,9 +59,7 @@ public class MainFragment extends Fragment {
                 .allowMainThreadQueries()
                 .build();
         mWordList = mAppDatabase.appDao().getWordList();
-
         setHasOptionsMenu(true);
-        Log.d("tag", "onCreate");
     }
 
     @Override
@@ -76,12 +73,6 @@ public class MainFragment extends Fragment {
         showSubtitle();
         Log.d("tag", "onCreateView");
         return view;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.d("tag", "onResume");
     }
 
     private void findViews(View view) {
@@ -103,7 +94,7 @@ public class MainFragment extends Fragment {
 
     private void initRecyclerView() {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mWordRecyclerViewAdapter = new WordRecyclerViewAdapter(mWordList, getActivity());
+        mWordRecyclerViewAdapter = new WordRecyclerViewAdapter(mAppDatabase.appDao().getWordList(), getActivity());
         mRecyclerView.setAdapter(mWordRecyclerViewAdapter);
     }
 
@@ -133,33 +124,31 @@ public class MainFragment extends Fragment {
     }
 
     @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        inflater.inflate(R.menu.menu, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.app_bar_search:
-
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (resultCode != Activity.RESULT_OK || data == null)
             return;
         if (requestCode == REQUEST_CODE_MAIN_FRAGMENT) {
             updateUi();
-            return;
-        }
-
-        if (requestCode == WordRecyclerViewAdapter.REQUEST_CODE_WORD_DETAIL) {
-            updateUi();
-            return;
         }
     }
 
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.search_menu, menu);
+        MenuItem item = menu.findItem(R.id.item_search);
+
+        SearchView searchView = (SearchView) item.getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                mWordRecyclerViewAdapter.getFilter().filter(newText);
+                return false;
+            }
+        });
+    }
 }

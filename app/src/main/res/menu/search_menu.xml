@@ -3,9 +3,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/app_bar_search"
+        android:id="@+id/item_search"
         android:icon="@drawable/ic_search_black_24dp"
         android:title="Search"
-        app:actionViewClass="android.widget.SearchView"
-        app:showAsAction="ifRoom|withText" />
+        app:showAsAction="always|collapseActionView"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"/>
 </menu>

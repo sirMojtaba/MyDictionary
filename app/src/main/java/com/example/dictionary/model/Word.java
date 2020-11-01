@@ -1,5 +1,6 @@
 package com.example.dictionary.model;
 
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -7,17 +8,19 @@ import java.io.Serializable;
 
 @Entity(tableName = "word")
 public class Word implements Serializable {
-    private String mPhrase;
+    @ColumnInfo (name = "word")
+    private String mWord;
+    @ColumnInfo(name = "meaning")
     private String mMeaning;
     @PrimaryKey(autoGenerate = true)
     private int mId;
 
-    public String getPhrase() {
-        return mPhrase;
+    public String getWord() {
+        return mWord;
     }
 
-    public void setPhrase(String phrase) {
-        mPhrase = phrase;
+    public void setWord(String word) {
+        mWord = word;
     }
 
     public String getMeaning() {
@@ -36,8 +39,8 @@ public class Word implements Serializable {
         mId = id;
     }
 
-    public Word(String phrase, String meaning) {
-        mPhrase = phrase;
+    public Word(String word, String meaning) {
+        mWord = word;
         mMeaning = meaning;
     }
 }
